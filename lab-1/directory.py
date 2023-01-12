@@ -1,14 +1,36 @@
 class Directory:
-    DIR_MAX_ELEMS = 100
+    DIR_MAX_ELEMS = 0
 
-    def __init__(self) -> None:
-        pass
+    def __init__(self, name, max_count_elems, parent = None):
+        if parent.DIR_MAX_ELEMS == len(parent.ls()):
+            print('Parent directory is full')
+            return
+
+        self.name = name
+        self.DIR_MAX_ELEMS = max_count_elems
+        self.content = []
+        self.parent = parent
 
     def delete(self):
-        pass
+        del self
+        print("Directory deleted successfully")
+        return
 
     def ls(self):
-        pass
+        print(f"{self.name}:\r\n")
+        for elem in self.content:
+            if type(elem) is Directory:
+                Directory(elem).ls()
+            print(f"|{elem.name}|")
 
-    def move(self, place):
-        pass
+    def move(self, moved_file, place):
+        if place.DIR_MAX_ELEMS == len(place.content):
+            print("Directory is full")
+            return
+
+        if type(place) is Directory:
+            place.content.append(moved_file)
+            self.content.remove(moved_file)
+            print("File transferred successfully")
+        else:
+            print("Directory with the given name was not found")
