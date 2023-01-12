@@ -3,13 +3,14 @@ from directory import Directory
 
 class BinaryFile:
     def __init__(self, name, parent):
-        if parent.DIR_MAX_ELEMS == len(parent.ls()):
+        if parent.DIR_MAX_ELEMS == len(parent.content):
             print('Parent directory is full')
             return
 
         self.name = name
         self.content = ""
         self.parent = parent
+        parent.content.append(self)
 
     def delete(self):
         del self
@@ -27,6 +28,7 @@ class BinaryFile:
         if type(place) is Directory:
             place.content.append(self)
             self.parent.content.remove(self)
+            self.parent = place
             print("File transferred successfully")
         else:
             print("Directory with the given name was not found")

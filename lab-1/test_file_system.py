@@ -1,3 +1,4 @@
+
 from directory import Directory
 from binary_file import BinaryFile
 from log_file import LogFile
@@ -11,43 +12,38 @@ class TestDirectory:
         test_directory = Directory(name, max_num_elem)
 
         assert test_directory.name == name
-        assert test_directory.count_elem == 0
+        assert len(test_directory.content) == 0
         assert type(test_directory) is not None
 
     def test_content_list(self):
-        dir = Directory("main", 10)
-        content = dir.ls()
+        directory = Directory("main", 10)
 
-        assert type(content) is list
+        assert type(directory.content) is list
 
-        content.append("logs")
+        directory.content.append("logs")
 
-        assert len(content) == 1
-        assert type(content[0]) is str
+        assert len(directory.content) == 1
+        assert type(directory.content[0]) is str
 
     def test_move_directory(self):
         main_dir = Directory("main", 10)
-        moved_dir = Directory("test1", 10)
-        inner_dir = Directory("inner", 10)
-
-        main_dir.content.append(inner_dir.name)
-        inner_dir.content.append(moved_dir.name)
+        inner_dir = Directory("inner", 10, main_dir)
+        moved_dir = Directory("test1", 10, inner_dir)
 
         assert len(main_dir.content) == 1
         assert len(inner_dir.content) == 1
-        assert moved_dir.parent == inner_dir.name
+        assert moved_dir.parent == inner_dir
 
         inner_dir.move(moved_dir, main_dir)
 
         assert len(main_dir.content) == 2
         assert len(inner_dir.content) == 0
-        assert moved_dir.parent == main_dir.name
+        assert moved_dir.parent == main_dir
 
     def test_del_directory(self):
-        test_dir = Directory("test, 10")
-        test_dir.delete()
+        test_dir = Directory("test", 10)
 
-        assert test_dir is None
+        assert test_dir.delete() is None
 
 
 class TestBinaryFile:
@@ -58,7 +54,7 @@ class TestBinaryFile:
         binar = BinaryFile(name, self.directory)
 
         assert binar is not None
-        assert len(self.directory.ls()) == 1
+        assert len(self.directory.content) == 1
 
     def test_move(self):
         binar = BinaryFile("bin_file", self.directory)
@@ -78,10 +74,8 @@ class TestBinaryFile:
 
     def test_del(self):
         binar = BinaryFile("bin_file", self.directory)
-        binar.delete()
 
-        assert binar is None
-        assert len(self.directory.ls()) == 0
+        assert binar.delete() is None
 
 
 class TestBufferFile:
@@ -93,8 +87,8 @@ class TestBufferFile:
         test_buff = BufferFile(name, max_elem, self.directory)
 
         assert test_buff is not None
-        assert test_buff.max_buff_size == max_elem
-        assert len(self.directory.ls()) == 1
+        assert test_buff.MAX_BUF_FILE_SIZE == max_elem
+        assert len(self.directory.content) == 1
 
     def test_move(self):
         buff = BufferFile("buff_file", 7, self.directory)
@@ -115,13 +109,11 @@ class TestBufferFile:
         assert len(buff.content) == 2
         assert buff.content.pop() == text2
 
-
     def test_del(self):
         buff = BufferFile("buff_file", 7, self.directory)
-        buff.delete()
 
-        assert buff is None
-        assert len(self.directory.ls()) == 0
+        assert buff.delete() is None
+
 
 class TestLogFile:
     directory = Directory("main", 10)
@@ -131,7 +123,7 @@ class TestLogFile:
         test_log = LogFile(name, self.directory)
 
         assert test_log is not None
-        assert len(self.directory.ls()) == 1
+        assert len(self.directory.content) == 1
 
     def test_read(self):
         text = "log text"
@@ -163,7 +155,5 @@ class TestLogFile:
 
     def test_del(self):
         log = LogFile("log_file", self.directory)
-        log.delete()
 
-        assert log is None
-        assert len(self.directory.ls()) == 0
+        assert log.delete() is None

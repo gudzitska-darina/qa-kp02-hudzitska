@@ -5,7 +5,7 @@ class BufferFile:
     MAX_BUF_FILE_SIZE = 100
 
     def __init__(self, name, max_elem, parent):
-        if parent.DIR_MAX_ELEMS == len(parent.ls()):
+        if parent.DIR_MAX_ELEMS == len(parent.content):
             print('Parent directory is full')
             return
 
@@ -13,6 +13,7 @@ class BufferFile:
         self.content = []
         self.MAX_BUF_FILE_SIZE = max_elem
         self.parent = parent
+        parent.content.append(self)
 
     def delete(self):
         del self
@@ -30,6 +31,7 @@ class BufferFile:
         if type(place) is Directory:
             place.content.append(self)
             self.parent.content.remove(self)
+            self.parent = place
             print("File transferred successfully")
         else:
             print("Directory with the given name was not found")
