@@ -1,4 +1,3 @@
-
 from directory import Directory
 from binary_file import BinaryFile
 from log_file import LogFile
@@ -7,7 +6,7 @@ from buffer_file import BufferFile
 
 class TestDirectory:
     def test_init(self):
-        name = "Main"
+        name = "main"
         max_num_elem = 10
         test_directory = Directory(name, max_num_elem)
 

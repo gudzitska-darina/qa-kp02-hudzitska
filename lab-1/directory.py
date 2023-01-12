@@ -2,10 +2,10 @@ class Directory:
     DIR_MAX_ELEMS = 0
 
     def __init__(self, name, max_count_elems, parent = None):
-        # if not type(parent) == None:
-        #     if parent.DIR_MAX_ELEMS == len(parent.content):
-        #         print('Parent directory is full')
-        #         return
+        if not parent == None:
+            if parent.DIR_MAX_ELEMS == len(parent.content):
+                print('Parent directory is full')
+                return
 
         self.name = name
         self.DIR_MAX_ELEMS = max_count_elems
